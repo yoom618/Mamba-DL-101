@@ -1,0 +1,1842 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#6f63d9">
+  <meta name="description" content="An interactive NeurIPS 2026 Education Track quiz covering the core ideas from state space models (SSMs) to Mamba.">
+  <meta name="author" content="Yoo-Min Jung, Doehyeon Lee">
+  <meta name="keywords" content="Mamba, SSM, State Space Models, Selective State Space Models, Deep Learning, Education, NeurIPS 2026, Machine Learning, Artificial Intelligence, #NeurIPS2026, #MachineLearning, #AI">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mamba 101 · Quick Quizzes - NeurIPS Education Track 2026">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ko_KR">
+  <meta property="og:title" content="Mamba 101 · Quick Quizzes - NeurIPS Education Track 2026">
+  <meta property="og:description" content="An interactive NeurIPS 2026 Education Track quiz covering the core ideas from state space models (SSMs) to Mamba.">
+  <meta property="og:image" content="https://raw.githubusercontent.com/yoom618/MambaSL/resource/figures_n_tables/etc/quick-quiz-og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Mamba 101 Quick Quizzes — NeurIPS 2026 Education Track">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mamba 101 · Quick Quizzes - NeurIPS Education Track 2026">
+  <meta name="twitter:description" content="An interactive NeurIPS 2026 Education Track quiz covering the core ideas from state space models (SSMs) to Mamba.">
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/yoom618/MambaSL/resource/figures_n_tables/etc/quick-quiz-og.png">
+  <meta name="twitter:image:alt" content="Mamba 101 Quick Quizzes — NeurIPS 2026 Education Track">
+  <title>Mamba 101 · Quick Quizzes - NeurIPS Education Track 2026</title>
+  <script>
+    window.katexHybrid = { css: false, js: false, ready: false };
+
+    function reportKatexAsset(kind, loaded) {
+      window.katexHybrid[kind] = loaded;
+      window.katexHybrid.ready = window.katexHybrid.css && window.katexHybrid.js;
+      if (window.katexHybrid.ready) window.dispatchEvent(new Event("katex-ready"));
+    }
+
+    if (new URLSearchParams(window.location.search).get("math") !== "fallback") {
+      const stylesheet = document.createElement("link");
+      stylesheet.rel = "stylesheet";
+      stylesheet.href = "https://cdn.jsdelivr.net/npm/katex@0.18.5/dist/katex.min.css";
+      stylesheet.integrity = "sha384-2dNi/m6JtSiviznrOIZ5fTiZ5As0In2QwkuXSgoqcQtCNplvJAbt+jveeN+8en73";
+      stylesheet.crossOrigin = "anonymous";
+      stylesheet.addEventListener("load", () => reportKatexAsset("css", true));
+      stylesheet.addEventListener("error", () => reportKatexAsset("css", false));
+      document.head.appendChild(stylesheet);
+
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/katex@0.18.5/dist/katex.min.js";
+      script.integrity = "sha384-TTF8eEsEKInX2meLzP5V1z/npGYIElXYGksx93f0qBZHu6IL3PdzVB8objytx+TR";
+      script.crossOrigin = "anonymous";
+      script.addEventListener("load", () => reportKatexAsset("js", true));
+      script.addEventListener("error", () => reportKatexAsset("js", false));
+      document.head.appendChild(script);
+    }
+  </script>
+  <style>
+    :root {
+      --ink: #20232b;
+      --muted: #747887;
+      --line: #e7e8f0;
+      --paper: #ffffff;
+      --lavender: #7768dc;
+      --lavender-deep: #5d50c9;
+      --lavender-soft: #f1efff;
+      --pink: #ee8bc8;
+      --pink-soft: #fff0f8;
+      --blue: #7e98ec;
+      --blue-soft: #edf3ff;
+      --mint: #9edfd3;
+      --mint-soft: #edfbf8;
+      --good: #21856f;
+      --good-soft: #e9f8f3;
+      --bad: #c94863;
+      --bad-soft: #fff0f3;
+      --warn: #8a6500;
+      --warn-soft: #fff8d9;
+      --shadow: 0 24px 70px rgba(65, 58, 120, 0.13);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { min-height: 100%; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 5% 8%, rgba(126, 152, 236, 0.12), transparent 27rem),
+        radial-gradient(circle at 94% 18%, rgba(238, 139, 200, 0.12), transparent 24rem),
+        #fafafe;
+      font-family: Inter, Pretendard, "Noto Sans KR", -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    button { font: inherit; }
+
+    .math-fallback:not([data-katex-rendered="true"]) {
+      font-family: "STIX Two Math", "Cambria Math", "STIXGeneral", "Times New Roman", serif;
+      font-style: italic;
+      font-variant-numeric: lining-nums;
+      letter-spacing: 0.005em;
+      white-space: nowrap;
+    }
+
+    .katex { font-size: 1.04em; }
+    .equation .katex { font-size: 1.12em; }
+
+    .page-shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 30px 0 32px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 16px;
+      height: 32px;
+      flex: 0 0 auto;
+      background: linear-gradient(180deg, var(--blue), var(--lavender));
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+    }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--lavender-deep);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 1px 0 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.5rem, 3vw, 2.35rem);
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+    }
+
+    h1 span { font-weight: 400; }
+
+    .counter {
+      flex: 0 0 auto;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .counter strong {
+      color: var(--ink);
+      font-size: 1.18rem;
+    }
+
+    .topbar-tools {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 0 0 auto;
+    }
+
+    .language-switch {
+      display: inline-flex;
+      gap: 2px;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.76);
+      box-shadow: 0 4px 14px rgba(65, 58, 120, 0.07);
+    }
+
+    .language-option {
+      min-width: 42px;
+      padding: 5px 10px;
+      border: 0;
+      border-radius: 999px;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      font-size: 0.76rem;
+      font-weight: 800;
+      line-height: 1.25;
+      transition: color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+    }
+
+    .language-option:hover:not(.is-active) {
+      color: var(--lavender-deep);
+      background: var(--lavender-soft);
+    }
+
+    .language-option.is-active {
+      color: #fff;
+      background: var(--lavender-deep);
+      box-shadow: 0 3px 9px rgba(93, 80, 201, 0.22);
+    }
+
+    .language-option:focus-visible {
+      outline: 3px solid rgba(126, 152, 236, 0.4);
+      outline-offset: 2px;
+    }
+
+    .progress-track {
+      height: 5px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e9e9f1;
+    }
+
+    .progress-fill {
+      width: 20%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--blue), var(--lavender), var(--pink));
+      transition: width 260ms ease;
+    }
+
+    .lineage {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 9px;
+      margin-bottom: 22px;
+    }
+
+    .lineage-step {
+      position: relative;
+      padding: 7px 9px;
+      border-radius: 5px;
+      color: white;
+      opacity: 0.4;
+      text-align: center;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(0.72rem, 1.6vw, 0.92rem);
+      letter-spacing: 0.01em;
+      transition: opacity 220ms ease;
+    }
+
+    .lineage-step.is-active { opacity: 1; }
+
+    .lineage-step:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      z-index: 2;
+      top: 50%;
+      right: -9px;
+      width: 9px;
+      height: 2px;
+      background: rgba(116, 104, 220, 0.36);
+    }
+
+    .lineage-step:nth-child(1) { background: #4c6fdf; }
+    .lineage-step:nth-child(2) { background: #876bdc; }
+    .lineage-step:nth-child(3) { background: #b462d3; }
+    .lineage-step:nth-child(4) { background: #d753c5; }
+    .lineage-step:nth-child(5) { background: #ee3fb3; }
+    .lineage-step:nth-child(6) { background: #f5269d; }
+
+    .quiz-card {
+      position: relative;
+      min-height: 620px;
+      overflow: hidden;
+      border: 1px solid rgba(119, 104, 220, 0.15);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--shadow);
+    }
+
+    .quiz-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #dca2da, #9aa6ed 48%, #9fdfd6);
+    }
+
+    .card-body { padding: clamp(28px, 5vw, 58px); }
+
+    .question-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .question-number {
+      color: var(--lavender-deep);
+      font-size: 0.8rem;
+      font-weight: 850;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .question-type {
+      padding: 4px 10px;
+      border-radius: 999px;
+      color: #6359a7;
+      background: var(--lavender-soft);
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+
+    .question-title {
+      max-width: 930px;
+      margin: 0 0 10px;
+      font-size: clamp(1.3rem, 2.3vw, 1.82rem);
+      line-height: 1.38;
+      letter-spacing: -0.025em;
+    }
+
+    .logic-word {
+      font-weight: inherit;
+      text-decoration-line: underline;
+      text-decoration-color: currentColor;
+      text-decoration-thickness: 0.15em;
+      text-underline-offset: 0.14em;
+      text-decoration-skip-ink: auto;
+    }
+
+    .question-note {
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .equation {
+      margin: 18px 0 24px;
+      padding: 18px 22px;
+      overflow-x: auto;
+      border-left: 4px solid var(--lavender);
+      background: linear-gradient(90deg, var(--lavender-soft), rgba(241, 239, 255, 0.25));
+      font-family: Cambria, "Cambria Math", Georgia, serif;
+      font-size: clamp(1rem, 2vw, 1.22rem);
+      white-space: nowrap;
+    }
+
+    .equation-prompt {
+      margin: -10px 0 22px;
+      color: var(--ink);
+      font-family: Inter, Pretendard, "Noto Sans KR", -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      font-size: 1rem;
+    }
+
+    .options {
+      display: grid;
+      gap: 11px;
+    }
+
+    .option {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      align-items: start;
+      width: 100%;
+      padding: 15px 17px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--ink);
+      background: #fff;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 150ms ease, transform 150ms ease, background 150ms ease;
+    }
+
+    .option:hover:not(:disabled) {
+      transform: translateY(-1px);
+      border-color: #b9b1ee;
+      background: #fdfcff;
+    }
+
+    .option:focus-visible,
+    .action:focus-visible,
+    .drag-card:focus-visible,
+    .drop-zone:focus-visible {
+      outline: 3px solid rgba(119, 104, 220, 0.27);
+      outline-offset: 2px;
+    }
+
+    .option-index {
+      display: grid;
+      width: 24px;
+      height: 24px;
+      place-items: center;
+      border: 1px solid #d7d8e2;
+      border-radius: 50%;
+      color: #797d8a;
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+
+    .option.selected {
+      border-color: var(--lavender);
+      background: var(--lavender-soft);
+    }
+
+    .option.selected .option-index {
+      border-color: var(--lavender);
+      color: white;
+      background: var(--lavender);
+    }
+
+    .option.correct {
+      border-color: #74c8b2;
+      background: var(--good-soft);
+    }
+
+    .option.correct .option-index {
+      border-color: var(--good);
+      color: white;
+      background: var(--good);
+    }
+
+    .option.wrong {
+      border-color: #eba1b1;
+      background: var(--bad-soft);
+    }
+
+    .option.wrong .option-index {
+      border-color: var(--bad);
+      color: white;
+      background: var(--bad);
+    }
+
+    .option:disabled { cursor: default; }
+
+    .statements {
+      display: grid;
+      gap: 8px;
+      margin: 20px 0 24px;
+      padding: 0;
+      list-style: none;
+      counter-reset: statement;
+    }
+
+    .statements li {
+      position: relative;
+      padding: 11px 14px 11px 50px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      counter-increment: statement;
+    }
+
+    .statements li::before {
+      content: counter(statement);
+      position: absolute;
+      top: 12px;
+      left: 15px;
+      display: grid;
+      width: 22px;
+      height: 22px;
+      place-items: center;
+      border-radius: 50%;
+      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--lavender));
+      font-size: 0.74rem;
+      font-weight: 800;
+    }
+
+    .drag-help {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 18px 0 12px;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .drag-help::before {
+      content: "↕";
+      display: grid;
+      width: 25px;
+      height: 25px;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--lavender-deep);
+      background: var(--lavender-soft);
+      font-weight: 900;
+    }
+
+    .card-bank {
+      display: flex;
+      min-height: 63px;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 17px;
+      padding: 12px;
+      border: 1px dashed #cfcfe0;
+      border-radius: 12px;
+      background: #fafafd;
+    }
+
+    .bank-empty {
+      align-self: center;
+      margin: auto;
+      color: #999cab;
+      font-size: 0.84rem;
+    }
+
+    .drag-card {
+      padding: 9px 13px;
+      border: 1px solid #c9c5eb;
+      border-radius: 8px;
+      color: #4f478f;
+      background: white;
+      font-size: 0.88rem;
+      font-weight: 750;
+      cursor: grab;
+      box-shadow: 0 4px 10px rgba(78, 70, 140, 0.08);
+    }
+
+    .drag-card.selected {
+      color: white;
+      border-color: var(--lavender);
+      background: var(--lavender);
+    }
+
+    .drag-card:active { cursor: grabbing; }
+
+    .drop-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .drop-zone {
+      min-height: 148px;
+      padding: 13px;
+      border: 1px solid #dfe0e9;
+      border-radius: 13px;
+      background: linear-gradient(180deg, #fff, #fbfbfe);
+      cursor: pointer;
+      transition: border-color 150ms ease, background 150ms ease;
+    }
+
+    .drop-zone:hover { border-color: #afa8e7; }
+
+    .drop-zone h3 {
+      margin: 0 0 3px;
+      font-size: 0.94rem;
+    }
+
+    .drop-zone p {
+      margin: 0 0 11px;
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+
+    .zone-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .zone-cards .drag-card {
+      padding: 7px 9px;
+      font-size: 0.79rem;
+    }
+
+    .zone-cards .drag-card.placed-correct {
+      color: #176a58;
+      border-color: #74c8b2;
+      background: var(--good-soft);
+    }
+
+    .zone-cards .drag-card.placed-wrong {
+      color: #a33249;
+      border-color: #eba1b1;
+      background: var(--bad-soft);
+    }
+
+    .feedback {
+      margin-top: 20px;
+      padding: 17px 19px;
+      border-radius: 12px;
+      animation: reveal 200ms ease both;
+    }
+
+    .feedback.good {
+      color: #185e50;
+      border: 1px solid #8bd1bf;
+      background: var(--good-soft);
+    }
+
+    .feedback.bad {
+      color: #893046;
+      border: 1px solid #efadba;
+      background: var(--bad-soft);
+    }
+
+    .feedback.warn {
+      color: #765600;
+      border: 1px solid #e4c96a;
+      background: var(--warn-soft);
+    }
+
+    .feedback-heading {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 5px 12px;
+      margin-bottom: 9px;
+    }
+
+    .feedback strong {
+      font-size: 1rem;
+    }
+
+    .feedback-answer {
+      font-size: 0.94rem;
+      font-weight: 400;
+    }
+
+    .explanation-list {
+      display: grid;
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .explanation-list li { line-height: 1.5; }
+
+    .explanation-key {
+      margin-right: 0.35em;
+      font-weight: 400;
+    }
+
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    .actions-right {
+      display: flex;
+      gap: 10px;
+    }
+
+    .action {
+      min-height: 44px;
+      padding: 10px 17px;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 150ms ease, opacity 150ms ease, background 150ms ease;
+    }
+
+    .action:hover:not(:disabled) { transform: translateY(-1px); }
+
+    .action:disabled {
+      opacity: 0.38;
+      cursor: default;
+    }
+
+    .action.secondary {
+      color: #666a78;
+      border-color: #dadbe4;
+      background: white;
+    }
+
+    .action.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--lavender), var(--lavender-deep));
+      box-shadow: 0 8px 20px rgba(93, 80, 201, 0.2);
+    }
+
+    .action.next {
+      color: #554d93;
+      border-color: #d4d0f2;
+      background: var(--lavender-soft);
+    }
+
+    .footer-note {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 16px;
+      align-items: center;
+      width: 100%;
+      margin: 26px 0 0;
+      padding: 0 4px;
+      color: #858896;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 0.75rem;
+      pointer-events: none;
+    }
+
+    .footer-note span:nth-child(2) { text-align: center; }
+    .footer-note span:last-child { text-align: right; }
+
+    .summary {
+      display: grid;
+      min-height: 540px;
+      place-items: center;
+      text-align: center;
+    }
+
+    .summary-inner { width: min(760px, 100%); }
+
+    .score-ring {
+      display: grid;
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 22px;
+      place-items: center;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, white 58%, transparent 60%),
+        conic-gradient(var(--lavender) var(--score-angle), #ecebf4 0);
+      box-shadow: 0 12px 32px rgba(93, 80, 201, 0.16);
+    }
+
+    .score-ring strong {
+      display: block;
+      font-size: 2.2rem;
+      line-height: 1;
+    }
+
+    .score-ring span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .summary h2 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      letter-spacing: -0.04em;
+    }
+
+    .summary-copy {
+      margin: 8px 0 25px;
+      color: var(--muted);
+    }
+
+    .result-list {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin: 0 0 28px;
+    }
+
+    .result-item {
+      padding: 11px 5px;
+      border-radius: 9px;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .result-item.good { color: var(--good); background: var(--good-soft); }
+    .result-item.warn { color: var(--warn); background: var(--warn-soft); }
+    .result-item.bad { color: var(--bad); background: var(--bad-soft); }
+
+    .summary-review {
+      display: grid;
+      gap: 10px;
+      margin: 0 0 28px;
+      text-align: left;
+    }
+
+    .summary-review h3 {
+      margin: 0 0 2px;
+      color: var(--ink);
+      font-size: 1rem;
+    }
+
+    .review-item {
+      overflow: hidden;
+      border: 1px solid #ead0d0;
+      border-radius: 10px;
+      background: #fffafa;
+    }
+
+    .review-item.warn { border-color: #e4c96a; background: var(--warn-soft); }
+    .review-item.warn summary { color: #765600; }
+    .review-item.warn .review-toggle { border-color: #d7bd5a; }
+    .review-item.warn .review-body { border-top-color: #ead98c; }
+
+    .review-item summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 14px;
+      color: var(--bad);
+      font-weight: 800;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .review-item summary::-webkit-details-marker { display: none; }
+
+    .review-summary-text {
+      display: grid;
+      min-width: 0;
+      grid-template-columns: 2.4rem minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+    }
+
+    .review-index { text-align: left; }
+
+    .review-toggle {
+      display: grid;
+      flex: 0 0 24px;
+      width: 24px;
+      height: 24px;
+      place-items: center;
+      border: 1px solid #dfbcbc;
+      border-radius: 50%;
+      background: white;
+      line-height: 1;
+    }
+
+    .review-toggle::before { content: "+"; }
+    .review-item[open] .review-toggle::before { content: "−"; }
+
+    .review-question {
+      color: var(--ink);
+      font-weight: 650;
+      line-height: 1.45;
+    }
+
+    .review-body {
+      padding: 13px 14px 15px 38px;
+      border-top: 1px solid #efdcdc;
+      background: white;
+      color: #4f5360;
+      font-size: 0.9rem;
+    }
+
+    .review-answer {
+      margin: 0 0 9px;
+      color: var(--bad);
+      font-weight: 400;
+    }
+
+    .derivation { line-height: 1.65; }
+    .derivation-line { display: block; margin-top: 7px; }
+    .derivation-line:first-child { margin-top: 0; }
+    .derivation-result {
+      display: block;
+      margin-top: 11px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    @media (max-width: 760px) {
+      .page-shell { width: min(100% - 20px, 1120px); padding-top: 18px; }
+      .topbar { align-items: flex-end; margin-bottom: 16px; }
+      .topbar-tools { flex-direction: column; align-items: flex-end; gap: 6px; }
+      .lineage { gap: 3px; }
+      .lineage-step { padding-inline: 3px; }
+      .lineage-step:not(:last-child)::after { right: -3px; width: 3px; }
+      .quiz-card { min-height: 0; border-radius: 15px; }
+      .card-body { padding: 24px 18px; }
+      .drop-grid { grid-template-columns: 1fr; }
+      .drop-zone { min-height: 112px; }
+      .actions { align-items: stretch; }
+      .actions-right { flex: 1; justify-content: flex-end; }
+      .action { padding-inline: 13px; }
+      .footer-note { gap: 8px; margin-top: 20px; font-size: 0.66rem; }
+    }
+
+    @media (max-width: 500px) {
+      .eyebrow { font-size: 0.66rem; }
+      .counter { font-size: 0.78rem; }
+      .counter strong { font-size: 1rem; }
+      .lineage-step:nth-child(3) { font-size: 0; }
+      .lineage-step:nth-child(3)::before { content: "LSSL"; font-size: 0.7rem; }
+      .option { padding: 13px 12px; }
+      .actions { flex-direction: column-reverse; }
+      .actions-right { display: grid; grid-template-columns: 1fr 1fr; }
+      .action.secondary { width: 100%; }
+      .result-list { grid-template-columns: repeat(5, minmax(48px, 1fr)); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header>
+      <div class="topbar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true"></div>
+          <div>
+            <p class="eyebrow">Deep Learning 101</p>
+            <h1><span>from SSM to</span> Mamba</h1>
+          </div>
+        </div>
+        <div class="topbar-tools">
+          <div class="language-switch" id="languageSwitch" role="group" aria-label="Choose language">
+            <button class="language-option is-active" type="button" data-language="en" aria-pressed="true">EN</button>
+            <button class="language-option" type="button" data-language="ko" aria-pressed="false">한국어</button>
+          </div>
+          <div class="counter" id="counter" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="progress-track" aria-hidden="true">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="lineage" id="lineage" aria-label="SSM에서 Mamba까지의 모델 계보">
+        <div class="lineage-step" data-model="ssm">SSM</div>
+        <div class="lineage-step" data-model="hippo">HiPPO</div>
+        <div class="lineage-step" data-model="lssl">LSSL</div>
+        <div class="lineage-step" data-model="s4d">S4(D)</div>
+        <div class="lineage-step" data-model="h3">H3</div>
+        <div class="lineage-step" data-model="mamba">Mamba</div>
+      </div>
+    </header>
+
+    <main id="app"></main>
+
+    <footer class="footer-note">
+      <span>NeurIPS ’26 · Education Track</span>
+      <span>Quick Quizzes</span>
+      <span>Y.-M. Jung &amp; D. Lee</span>
+    </footer>
+  </div>
+
+  <script>
+    const koreanQuestions = [
+      {
+        id: "pre-mamba",
+        type: "multi",
+        typeLabel: "복수정답",
+        title: "LSSL, S4D, H3 내부의 SSM core가 공통으로 갖지 <span class=\"logic-word\">않는</span> 성질을 <span class=\"logic-word\">모두</span> 고르시오.",
+        note: "H3 전체 블록이 아니라 SSM 연산만을 기준으로 합니다.",
+        options: [
+          { id: "lti", text: "Standard fixed-step setting에서 LTI dynamics를 갖는다." },
+          { id: "channel", text: "1-D SSM을 각 feature channel에 독립적으로 적용한다." },
+          { id: "conv", text: "고정된 convolution kernel을 이용해 병렬 학습할 수 있다." },
+          { id: "bc", text: "\\(\\boldsymbol{B}_t\\), \\(\\boldsymbol{C}_t\\)가 현재 입력 \\(\\boldsymbol{x}_t\\)에 따라 달라진다." },
+          { id: "delta", text: "\\(\\Delta_t=f(\\boldsymbol{x}_t)\\)로 정의된다." }
+        ],
+        correct: ["bc", "delta"],
+        explanation: [
+          { key: "①②③", text: "Pre-Mamba의 LTI SSM core가 공유하는 성질입니다. 위치마다 같은 dynamics를 사용하며, feature channel별 1-D SSM과 고정 kernel convolution 표현이 가능합니다." },
+          { key: "④⑤", text: "공유하지 않는 성질입니다. 입력에 따라 \\(\\boldsymbol{B}, \\boldsymbol{C}, \\Delta\\)가 달라지는 content-dependent selection은 Mamba에서 도입됩니다." }
+        ]
+      },
+      {
+        id: "a-structure",
+        type: "drag",
+        typeLabel: "드래그",
+        title: "각 모델 또는 구성요소를 \\(\\boldsymbol{A}\\)의 구조에 맞는 영역으로 드래그하세요.",
+        note: "학습 가능한 버전은 \\(\\boldsymbol{A}\\)를 학습한다고 가정합니다. 카드를 선택한 뒤 영역을 눌러도 배치할 수 있습니다.",
+        items: [
+          { id: "hippo", label: "HiPPO" },
+          { id: "lssl", label: "LSSL" },
+          { id: "s4", label: "S4" },
+          { id: "s4d", label: "S4D" },
+          { id: "h3shift", label: "H3의 shift SSM" },
+          { id: "mamba", label: "Mamba" }
+        ],
+        categories: [
+          { id: "fixed", label: "Prescribed / fixed \\(\\boldsymbol{A}\\)", sub: "미리 정해진 상태 전이" },
+          { id: "structured", label: "Learnable structured \\(\\boldsymbol{A}\\)", sub: "일반적인 dense matrix보다 효율적인 구조" },
+          { id: "diagonal", label: "Learnable diagonal \\(\\boldsymbol{A}\\)", sub: "대각 성분만 학습" }
+        ],
+        correct: {
+          hippo: "fixed",
+          h3shift: "fixed",
+          lssl: "structured",
+          s4: "structured",
+          s4d: "diagonal",
+          mamba: "diagonal"
+        },
+        explanation: [
+          { key: "Prescribed / fixed \\(\\boldsymbol{A}\\)", text: "HiPPO, H3의 shift SSM" },
+          { key: "Learnable structured \\(\\boldsymbol{A}\\)", text: "LSSL, S4" },
+          { key: "Learnable diagonal \\(\\boldsymbol{A}\\)", text: "S4D, Mamba" }
+        ]
+      },
+      {
+        id: "kernel",
+        type: "single",
+        typeLabel: "단일정답",
+        title: "초기 state가 0일 때 다음 discrete SSM을 길이 \\(L\\)의 causal convolution으로 나타내려고 한다.",
+        note: "",
+        equation: "\\(\\boldsymbol{s}_t=\\bar{\\boldsymbol{A}}\\boldsymbol{s}_{t-1}+\\bar{\\boldsymbol{B}}x_t\\)<br>\\(y_t=\\boldsymbol{C}\\boldsymbol{s}_t+Dx_t\\)",
+        prompt: "\\(\\boldsymbol{y}=\\boldsymbol{K}*\\boldsymbol{x}+D\\boldsymbol{x}\\)에서 올바른 \\(\\boldsymbol{K}\\)는?",
+        options: [
+          { id: "no-c", text: "\\((\\bar{\\boldsymbol{B}},\\,\\bar{\\boldsymbol{A}}\\bar{\\boldsymbol{B}},\\,\\ldots,\\,\\bar{\\boldsymbol{A}}^{L-1}\\bar{\\boldsymbol{B}})\\)" },
+          { id: "power", text: "\\((\\bar{\\boldsymbol{A}}\\bar{\\boldsymbol{B}},\\,\\bar{\\boldsymbol{A}}^{2}\\bar{\\boldsymbol{B}},\\,\\ldots,\\,\\bar{\\boldsymbol{A}}^{L}\\bar{\\boldsymbol{B}})\\)" },
+          { id: "shifted", text: "\\((\\boldsymbol{C}\\bar{\\boldsymbol{A}}\\bar{\\boldsymbol{B}},\\,\\boldsymbol{C}\\bar{\\boldsymbol{A}}^{2}\\bar{\\boldsymbol{B}},\\,\\ldots,\\,\\boldsymbol{C}\\bar{\\boldsymbol{A}}^{L}\\bar{\\boldsymbol{B}})\\)" },
+          { id: "correct", text: "\\((\\boldsymbol{C}\\bar{\\boldsymbol{B}},\\,\\boldsymbol{C}\\bar{\\boldsymbol{A}}\\bar{\\boldsymbol{B}},\\,\\ldots,\\,\\boldsymbol{C}\\bar{\\boldsymbol{A}}^{L-1}\\bar{\\boldsymbol{B}})\\)" },
+          { id: "too-long", text: "\\((\\boldsymbol{C}\\bar{\\boldsymbol{B}},\\,\\boldsymbol{C}\\bar{\\boldsymbol{A}}\\bar{\\boldsymbol{B}},\\,\\ldots,\\,\\boldsymbol{C}\\bar{\\boldsymbol{A}}^{L}\\bar{\\boldsymbol{B}})\\)" }
+        ],
+        correct: "correct",
+        explanation: "<span class=\"derivation-line\">초기 state가 0이므로 recurrence를 전개하면 \\(\\boldsymbol{s}_t=\\bar{\\boldsymbol{B}}x_t+\\bar{\\boldsymbol{A}}\\bar{\\boldsymbol{B}}x_{t-1}+\\cdots+\\bar{\\boldsymbol{A}}^{t-1}\\bar{\\boldsymbol{B}}x_1\\)이다.</span><span class=\"derivation-line\">이를 출력식에 대입하면 \\(y_t=Dx_t+\\boldsymbol{C}\\bar{\\boldsymbol{B}}x_t+\\boldsymbol{C}\\bar{\\boldsymbol{A}}\\bar{\\boldsymbol{B}}x_{t-1}+\\cdots+\\boldsymbol{C}\\bar{\\boldsymbol{A}}^{t-1}\\bar{\\boldsymbol{B}}x_1\\)이 된다.</span><span class=\"derivation-result\">따라서 길이 \\(L\\)의 causal convolution kernel은 \\(\\boldsymbol{K}=(\\boldsymbol{C}\\bar{\\boldsymbol{B}},\\,\\boldsymbol{C}\\bar{\\boldsymbol{A}}\\bar{\\boldsymbol{B}},\\,\\ldots,\\,\\boldsymbol{C}\\bar{\\boldsymbol{A}}^{L-1}\\bar{\\boldsymbol{B}})\\)이다.</span>"
+      },
+      {
+        id: "selective-params",
+        type: "multi",
+        typeLabel: "복수정답",
+        title: "Mamba의 selective SSM에서 현재 입력 \\(\\boldsymbol{x}_t\\)의 함수로 만들어지는 parameter를 <span class=\"logic-word\">모두</span> 고르시오.",
+        note: "\\(\\boldsymbol{A}, \\boldsymbol{B}, \\boldsymbol{C}, D, \\Delta\\) 중에서 선택하세요.",
+        options: [
+          { id: "A", text: "\\(\\boldsymbol{A}\\)" },
+          { id: "B", text: "\\(\\boldsymbol{B}\\)" },
+          { id: "C", text: "\\(\\boldsymbol{C}\\)" },
+          { id: "D", text: "\\(D\\)" },
+          { id: "Delta", text: "\\(\\Delta\\)" }
+        ],
+        correct: ["B", "C", "Delta"],
+        explanation: [
+          { key: "①", text: "\\(\\boldsymbol{A}\\)는 입력과 무관하게 학습되는 diagonal matrix입니다." },
+          { key: "②③⑤", text: "\\(\\boldsymbol{B}, \\boldsymbol{C}, \\Delta\\)는 현재 입력 \\(\\boldsymbol{x}_t\\)의 함수로 만들어지는 selective parameter입니다." },
+          { key: "④", text: "\\(D\\)는 state를 거치지 않는 direct feedthrough 또는 skip parameter입니다." }
+        ]
+      },
+      {
+        id: "applications",
+        type: "single",
+        typeLabel: "단일정답",
+        title: "Mamba의 구현과 응용에 관한 설명으로 옳은 것은?",
+        note: "하나만 선택하세요.",
+        options: [
+          { id: "hf-official", text: "Mamba의 공식 라이브러리는 Hugging Face에서 제공하고 있다." },
+          { id: "vision", text: "이미지 도메인에서는 2-D 이미지에 1-D selective scan을 적용하기 위한 scan 순서와 방향이 중요한 설계 요소이다." },
+          { id: "channel-axis", text: "시계열의 channel-axis 방식은 각 시점을 하나의 token으로 만들고 모든 channel을 token의 feature로 사용한다." },
+          { id: "hybrid", text: "Mamba–Transformer hybrid model들은 초반에 Mamba로 긴 시퀀스 정보를 축약하고, 이후 Transformers를 통해 정보를 가공하는 모델을 의미한다." },
+          { id: "time-loss", text: "Channel-axis 방식은 각 변수의 시간축 정보를 제거하므로 time-axis 방식보다 대체로 성능이 낮다." }
+        ],
+        correct: "vision",
+        explanation: [
+          { key: "①", text: "공식 라이브러리는 원 저자 측 state-spaces/mamba의 mamba-ssm입니다. Hugging Face는 별도의 Transformers 구현과 모델 연동을 제공합니다." },
+          { key: "②", text: "정답입니다. 2-D 이미지를 1-D sequence로 scan하는 순서와 방향은 vision Mamba의 주요 설계 요소입니다." },
+          { key: "③", text: "각 시점을 token으로 두고 channel을 feature로 쓰는 설명은 time-axis 방식에 가깝습니다." },
+          { key: "④", text: "Hybrid model의 Mamba와 Transformer 배치 방식은 다양하므로 지나친 일반화입니다." },
+          { key: "⑤", text: "Channel-axis 방식이 시간 정보를 반드시 제거하거나 대체로 더 낮은 성능을 보인다고 일반화할 수 없습니다." }
+        ]
+      }
+    ];
+
+    const englishQuestions = [
+      {
+        id: "pre-mamba",
+        type: "multi",
+        typeLabel: "MULTIPLE ANSWERS",
+        title: "Select <span class=\"logic-word\">all</span> properties that are <span class=\"logic-word\">not</span> shared by the SSM cores in LSSL, S4D, and H3.",
+        note: "Consider only the SSM operations, rather than the entire H3 block.",
+        options: [
+          { id: "lti", text: "They have LTI dynamics in the standard fixed-step setting." },
+          { id: "channel", text: "A 1-D SSM is applied independently to each feature channel." },
+          { id: "conv", text: "Training can be parallelized using a fixed convolution kernel." },
+          { id: "bc", text: "\\(\\boldsymbol{B}_t\\) and \\(\\boldsymbol{C}_t\\) vary with the current input \\(\\boldsymbol{x}_t\\)." },
+          { id: "delta", text: "\\(\\Delta_t=f(\\boldsymbol{x}_t)\\)." }
+        ],
+        correct: ["bc", "delta"],
+        explanation: [
+          { key: "①②③", text: "These properties are shared by the pre-Mamba LTI SSM cores: fixed dynamics across positions, a per-feature-channel 1-D SSM, and a fixed convolution-kernel representation." },
+          { key: "④⑤", text: "These properties are not shared. Mamba introduces content-dependent selection by making \\(\\boldsymbol{B}, \\boldsymbol{C}, \\Delta\\) depend on the input." }
+        ]
+      },
+      {
+        id: "a-structure",
+        type: "drag",
+        typeLabel: "DRAG AND DROP",
+        title: "Drag each model or component into the category that matches the structure of \\(\\boldsymbol{A}\\).",
+        note: "When a trainable version exists, assume that \\(\\boldsymbol{A}\\) is trained. You may also select one or more cards and then choose a category.",
+        items: [
+          { id: "hippo", label: "HiPPO" },
+          { id: "lssl", label: "LSSL" },
+          { id: "s4", label: "S4" },
+          { id: "s4d", label: "S4D" },
+          { id: "h3shift", label: "Shift SSM in H3" },
+          { id: "mamba", label: "Mamba" }
+        ],
+        categories: [
+          { id: "fixed", label: "Prescribed / fixed \\(\\boldsymbol{A}\\)", sub: "The state transition is predefined" },
+          { id: "structured", label: "Learnable structured \\(\\boldsymbol{A}\\)", sub: "More efficient than a general dense matrix" },
+          { id: "diagonal", label: "Learnable diagonal \\(\\boldsymbol{A}\\)", sub: "Only its diagonal entries are trained" }
+        ],
+        correct: {
+          hippo: "fixed",
+          h3shift: "fixed",
+          lssl: "structured",
+          s4: "structured",
+          s4d: "diagonal",
+          mamba: "diagonal"
+        },
+        explanation: [
+          { key: "Prescribed / fixed \\(\\boldsymbol{A}\\)", text: "HiPPO and the shift SSM in H3" },
+          { key: "Learnable structured \\(\\boldsymbol{A}\\)", text: "LSSL and S4" },
+          { key: "Learnable diagonal \\(\\boldsymbol{A}\\)", text: "S4D and Mamba" }
+        ]
+      },
+      {
+        id: "kernel",
+        type: "single",
+        typeLabel: "SINGLE ANSWER",
+        title: "With zero initial state, consider expressing the following discrete SSM as a length-\\(L\\) causal convolution.",
+        note: "",
+        equation: "\\(\\boldsymbol{s}_t=\\bar{\\boldsymbol{A}}\\boldsymbol{s}_{t-1}+\\bar{\\boldsymbol{B}}x_t\\)<br>\\(y_t=\\boldsymbol{C}\\boldsymbol{s}_t+Dx_t\\)",
+        prompt: "In \\(\\boldsymbol{y}=\\boldsymbol{K}*\\boldsymbol{x}+D\\boldsymbol{x}\\), which \\(\\boldsymbol{K}\\) is correct?",
+        options: [
+          { id: "no-c", text: "\\((\\bar{\\boldsymbol{B}},\\,\\bar{\\boldsymbol{A}}\\bar{\\boldsymbol{B}},\\,\\ldots,\\,\\bar{\\boldsymbol{A}}^{L-1}\\bar{\\boldsymbol{B}})\\)" },
+          { id: "power", text: "\\((\\bar{\\boldsymbol{A}}\\bar{\\boldsymbol{B}},\\,\\bar{\\boldsymbol{A}}^{2}\\bar{\\boldsymbol{B}},\\,\\ldots,\\,\\bar{\\boldsymbol{A}}^{L}\\bar{\\boldsymbol{B}})\\)" },
+          { id: "shifted", text: "\\((\\boldsymbol{C}\\bar{\\boldsymbol{A}}\\bar{\\boldsymbol{B}},\\,\\boldsymbol{C}\\bar{\\boldsymbol{A}}^{2}\\bar{\\boldsymbol{B}},\\,\\ldots,\\,\\boldsymbol{C}\\bar{\\boldsymbol{A}}^{L}\\bar{\\boldsymbol{B}})\\)" },
+          { id: "correct", text: "\\((\\boldsymbol{C}\\bar{\\boldsymbol{B}},\\,\\boldsymbol{C}\\bar{\\boldsymbol{A}}\\bar{\\boldsymbol{B}},\\,\\ldots,\\,\\boldsymbol{C}\\bar{\\boldsymbol{A}}^{L-1}\\bar{\\boldsymbol{B}})\\)" },
+          { id: "too-long", text: "\\((\\boldsymbol{C}\\bar{\\boldsymbol{B}},\\,\\boldsymbol{C}\\bar{\\boldsymbol{A}}\\bar{\\boldsymbol{B}},\\,\\ldots,\\,\\boldsymbol{C}\\bar{\\boldsymbol{A}}^{L}\\bar{\\boldsymbol{B}})\\)" }
+        ],
+        correct: "correct",
+        explanation: "<span class=\"derivation-line\">With zero initial state, expanding the recurrence gives \\(\\boldsymbol{s}_t=\\bar{\\boldsymbol{B}}x_t+\\bar{\\boldsymbol{A}}\\bar{\\boldsymbol{B}}x_{t-1}+\\cdots+\\bar{\\boldsymbol{A}}^{t-1}\\bar{\\boldsymbol{B}}x_1\\).</span><span class=\"derivation-line\">Substituting this into the output equation gives \\(y_t=Dx_t+\\boldsymbol{C}\\bar{\\boldsymbol{B}}x_t+\\boldsymbol{C}\\bar{\\boldsymbol{A}}\\bar{\\boldsymbol{B}}x_{t-1}+\\cdots+\\boldsymbol{C}\\bar{\\boldsymbol{A}}^{t-1}\\bar{\\boldsymbol{B}}x_1\\).</span><span class=\"derivation-result\">Therefore, the length-\\(L\\) causal convolution kernel is \\(\\boldsymbol{K}=(\\boldsymbol{C}\\bar{\\boldsymbol{B}},\\,\\boldsymbol{C}\\bar{\\boldsymbol{A}}\\bar{\\boldsymbol{B}},\\,\\ldots,\\,\\boldsymbol{C}\\bar{\\boldsymbol{A}}^{L-1}\\bar{\\boldsymbol{B}})\\).</span>"
+      },
+      {
+        id: "selective-params",
+        type: "multi",
+        typeLabel: "MULTIPLE ANSWERS",
+        title: "Select <span class=\"logic-word\">all</span> parameters that are functions of the current input \\(\\boldsymbol{x}_t\\) in Mamba's selective SSM.",
+        note: "Choose from \\(\\boldsymbol{A}, \\boldsymbol{B}, \\boldsymbol{C}, D, \\Delta\\).",
+        options: [
+          { id: "A", text: "\\(\\boldsymbol{A}\\)" },
+          { id: "B", text: "\\(\\boldsymbol{B}\\)" },
+          { id: "C", text: "\\(\\boldsymbol{C}\\)" },
+          { id: "D", text: "\\(D\\)" },
+          { id: "Delta", text: "\\(\\Delta\\)" }
+        ],
+        correct: ["B", "C", "Delta"],
+        explanation: [
+          { key: "①", text: "\\(\\boldsymbol{A}\\) is an input-independent learned diagonal matrix." },
+          { key: "②③⑤", text: "\\(\\boldsymbol{B}, \\boldsymbol{C}, \\Delta\\) are selective parameters that depend on the current input \\(\\boldsymbol{x}_t\\)." },
+          { key: "④", text: "\\(D\\) is the direct feedthrough or skip parameter that bypasses the state." }
+        ]
+      },
+      {
+        id: "applications",
+        type: "single",
+        typeLabel: "SINGLE ANSWER",
+        title: "Which statement about Mamba implementations and applications is correct?",
+        note: "Choose one answer.",
+        options: [
+          { id: "hf-official", text: "The official Mamba library is provided by Hugging Face." },
+          { id: "vision", text: "In vision, the scan order and direction are important design choices when applying a 1-D selective scan to a 2-D image." },
+          { id: "channel-axis", text: "A channel-axis approach to time series represents each time step as a token and uses all channels as its features." },
+          { id: "hybrid", text: "Mamba–Transformer hybrid models are defined as models that first compress a long sequence with Mamba and then process it with Transformers." },
+          { id: "time-loss", text: "Channel-axis approaches discard the temporal information of each variable and therefore generally underperform time-axis approaches." }
+        ],
+        correct: "vision",
+        explanation: [
+          { key: "①", text: "The original authors provide the official mamba-ssm library through state-spaces/mamba. Hugging Face provides a separate Transformers implementation and model integration." },
+          { key: "②", text: "Correct. The order and direction used to scan a 2-D image as a 1-D sequence are important design choices in vision Mamba models." },
+          { key: "③", text: "Representing each time step as a token with channels as features describes a time-axis layout, not a channel-axis layout." },
+          { key: "④", text: "Hybrid models arrange Mamba and Transformer blocks in multiple ways, so this definition is too broad." },
+          { key: "⑤", text: "A channel-axis approach does not necessarily discard temporal information or generally underperform a time-axis approach." }
+        ]
+      }
+    ];
+
+    let isEnglish = new URLSearchParams(window.location.search).get("lang") !== "ko";
+    let questions = isEnglish ? englishQuestions : koreanQuestions;
+    const lineageByQuestion = {
+      "pre-mamba": ["lssl", "s4d", "h3"],
+      "a-structure": ["hippo", "lssl", "s4d", "h3", "mamba"],
+      "kernel": ["lssl"],
+      "selective-params": ["mamba"],
+      "applications": ["mamba"]
+    };
+    function uiForLanguage(english) {
+      return english
+      ? {
+          bankEmpty: "All cards have been placed.",
+          dragHelp: "Drag cards, or select one or more cards and then choose a region.",
+          correct: "Correct.",
+          incorrect: "Incorrect",
+          correctAnswer: "Correct answer:",
+          back: "Back",
+          check: "Check answer",
+          next: "Next",
+          results: "View results",
+          restart: "Try again",
+          resultCorrect: "Correct",
+          resultPartial: "Partial",
+          resultWrong: "Incorrect",
+          summaryPerfectTitle: "Excellent!",
+          summaryGoodTitle: "Good progress",
+          summaryReviewTitle: "Review and retry",
+          perfect: "You understand the path from SSMs to Mamba accurately.",
+          good: "You have the main ideas. Open the explanations for the questions you missed below.",
+          review: "Review the explanations below, then try again.",
+          reviewHeading: "Review missed questions",
+          lineage: "Model lineage from SSM to Mamba",
+          bankLabel: "Unplaced cards",
+          regionSuffix: "region"
+        }
+      : {
+          bankEmpty: "모든 카드를 배치했습니다.",
+          dragHelp: "드래그하거나 카드를 하나 이상 선택한 뒤 영역을 누르세요.",
+          correct: "정답입니다.",
+          incorrect: "오답입니다.",
+          correctAnswer: "정답:",
+          back: "이전",
+          check: "정답 확인",
+          next: "다음",
+          results: "결과 보기",
+          restart: "다시 풀기",
+          resultCorrect: "정답",
+          resultPartial: "부분정답",
+          resultWrong: "오답",
+          summaryPerfectTitle: "Excellent!",
+          summaryGoodTitle: "Good progress",
+          summaryReviewTitle: "Review and retry",
+          perfect: "SSM에서 Mamba까지의 연결을 정확히 이해하고 있습니다.",
+          good: "핵심 흐름은 잘 잡았습니다. 아래에서 틀린 문항의 해설을 확인해 보세요.",
+          review: "아래 해설을 확인한 뒤 다시 풀어 보세요.",
+          reviewHeading: "틀린 문항 해설",
+          lineage: "SSM에서 Mamba까지의 모델 계보",
+          bankLabel: "아직 배치하지 않은 카드",
+          regionSuffix: "영역"
+        };
+    }
+    let ui = uiForLanguage(isEnglish);
+
+    function syncLanguageDocument(updateUrl = false) {
+      document.documentElement.lang = isEnglish ? "en" : "ko";
+      document.title = "Mamba 101 · Quick Quizzes - NeurIPS Education Track 2026";
+      document.querySelector('meta[name="description"]').content = isEnglish
+        ? "An interactive NeurIPS 2026 Education Track quiz covering the core ideas from state space models (SSMs) to Mamba."
+        : "SSM에서 Mamba까지의 핵심 개념을 점검하는 NeurIPS 2026 Education Track용 인터랙티브 퀴즈.";
+      document.querySelector('meta[name="keywords"]').content = isEnglish
+        ? "Mamba, SSM, State Space Models, Selective State Space Models, Deep Learning, Education, NeurIPS 2026, Machine Learning, Artificial Intelligence, #NeurIPS2026, #MachineLearning, #AI"
+        : "Mamba, SSM, State Space Model, 선택적 상태공간모델, 딥러닝, 교육, NeurIPS 2026, Machine Learning, Artificial Intelligence, #NeurIPS2026, #MachineLearning, #AI";
+      document.querySelector('meta[property="og:locale"]').content = isEnglish ? "en_US" : "ko_KR";
+      document.querySelector('meta[property="og:locale:alternate"]').content = isEnglish ? "ko_KR" : "en_US";
+      document.querySelector('meta[property="og:title"]').content = document.title;
+      document.querySelector('meta[property="og:description"]').content = document.querySelector('meta[name="description"]').content;
+      document.querySelector('meta[name="twitter:title"]').content = document.title;
+      document.querySelector('meta[name="twitter:description"]').content = document.querySelector('meta[name="description"]').content;
+      document.getElementById("lineage").setAttribute("aria-label", ui.lineage);
+      document.getElementById("languageSwitch").setAttribute("aria-label", isEnglish ? "Choose language" : "언어 선택");
+      document.querySelectorAll("[data-language]").forEach((button) => {
+        const active = button.dataset.language === (isEnglish ? "en" : "ko");
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+      if (updateUrl) {
+        const url = new URL(window.location.href);
+        if (isEnglish) url.searchParams.delete("lang");
+        else url.searchParams.set("lang", "ko");
+        window.history.replaceState(null, "", url);
+      }
+    }
+    syncLanguageDocument();
+
+    const state = {
+      index: 0,
+      answers: {},
+      checked: {},
+      correctness: {},
+      selectedDrags: [],
+      summary: false
+    };
+
+    const app = document.getElementById("app");
+    const counter = document.getElementById("counter");
+    const progressFill = document.getElementById("progressFill");
+
+    function switchLanguage(language) {
+      const nextIsEnglish = language !== "ko";
+      if (nextIsEnglish === isEnglish) return;
+      isEnglish = nextIsEnglish;
+      questions = isEnglish ? englishQuestions : koreanQuestions;
+      ui = uiForLanguage(isEnglish);
+      state.selectedDrags = [];
+      syncLanguageDocument(true);
+      if (state.summary) renderSummary();
+      else renderQuestion();
+    }
+
+    document.querySelectorAll("[data-language]").forEach((button) => {
+      button.addEventListener("click", () => switchLanguage(button.dataset.language));
+    });
+
+    const superscriptCharacters = {
+      "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴",
+      "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹",
+      "+": "⁺", "-": "⁻", "=": "⁼", "(": "⁽", ")": "⁾",
+      "L": "ᴸ", "T": "ᵀ", "n": "ⁿ", "t": "ᵗ"
+    };
+    const subscriptCharacters = {
+      "0": "₀", "1": "₁", "2": "₂", "3": "₃", "4": "₄",
+      "5": "₅", "6": "₆", "7": "₇", "8": "₈", "9": "₉",
+      "+": "₊", "-": "₋", "=": "₌", "(": "₍", ")": "₎",
+      "t": "ₜ", "x": "ₓ"
+    };
+
+    function convertScriptCharacters(value, characterMap) {
+      return Array.from(value).map((character) => characterMap[character] || character).join("");
+    }
+
+    function texFallback(tex) {
+      const boldItalicSymbols = {
+        A: "𝑨", B: "𝑩", C: "𝑪", K: "𝑲", s: "𝒔", x: "𝒙", y: "𝒚"
+      };
+      return tex
+        .replace(/\\boldsymbol\{([ABCKsxy])\}/g, (_, symbol) => boldItalicSymbols[symbol] || symbol)
+        .replace(/\\mathsf\{T\}/g, "T")
+        .replace(/\\mathbf\{([^{}]+)\}/g, "$1")
+        .replace(/\\bar\{([^{}]+)\}/g, (_, value) => Array.from(value).map((character) => `${character}\u0304`).join(""))
+        .replace(/\\Delta/g, "Δ")
+        .replace(/\\ldots/g, "…")
+        .replace(/\\quad/g, "  ")
+        .replace(/\\,/g, " ")
+        .replace(/\^\{([^{}]+)\}/g, (_, value) => convertScriptCharacters(value, superscriptCharacters))
+        .replace(/\^([A-Za-z0-9+\-=()])/g, (_, value) => convertScriptCharacters(value, superscriptCharacters))
+        .replace(/_\{([^{}]+)\}/g, (_, value) => convertScriptCharacters(value, subscriptCharacters))
+        .replace(/_([A-Za-z0-9+\-=()])/g, (_, value) => convertScriptCharacters(value, subscriptCharacters))
+        .replace(/[{}]/g, "")
+        .replace(/\\/g, "");
+    }
+
+    function wrapFallbackMath(root) {
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      const nodes = [];
+      while (walker.nextNode()) {
+        if (/\\\(|\\\[/.test(walker.currentNode.nodeValue)) nodes.push(walker.currentNode);
+      }
+
+      nodes.forEach((node) => {
+        const fragment = document.createDocumentFragment();
+        const expressionPattern = /\\\(([\s\S]*?)\\\)|\\\[([\s\S]*?)\\\]/g;
+        let cursor = 0;
+        let match;
+        while ((match = expressionPattern.exec(node.nodeValue)) !== null) {
+          if (match.index > cursor) fragment.append(node.nodeValue.slice(cursor, match.index));
+          const tex = match[1] ?? match[2];
+          const span = document.createElement("span");
+          span.className = "math-fallback";
+          span.dataset.tex = tex;
+          span.dataset.display = match[2] !== undefined ? "true" : "false";
+          span.textContent = texFallback(tex);
+          fragment.append(span);
+          cursor = expressionPattern.lastIndex;
+        }
+        if (cursor < node.nodeValue.length) fragment.append(node.nodeValue.slice(cursor));
+        node.replaceWith(fragment);
+      });
+    }
+
+    function typesetMath(root = app) {
+      wrapFallbackMath(root);
+      if (!window.katexHybrid.ready || typeof window.katex?.render !== "function") return;
+      root.querySelectorAll('.math-fallback[data-tex]:not([data-katex-rendered="true"])').forEach((element) => {
+        try {
+          window.katex.render(element.dataset.tex, element, {
+            displayMode: element.dataset.display === "true",
+            throwOnError: false
+          });
+          element.dataset.katexRendered = "true";
+        } catch {
+          element.dataset.katexRendered = "false";
+        }
+      });
+    }
+
+    window.addEventListener("katex-ready", () => typesetMath(app));
+    window.addEventListener("DOMContentLoaded", () => typesetMath(app), { once: true });
+
+    function optionNumber(index) {
+      return ["1", "2", "3", "4", "5"][index] || String(index + 1);
+    }
+
+    function circledOptionNumber(index) {
+      return ["①", "②", "③", "④", "⑤"][index] || String(index + 1);
+    }
+
+    function shuffleQuestionOptions() {
+      const orderByQuestion = new Map();
+      englishQuestions.forEach((question) => {
+        if (question.id === "a-structure" || !Array.isArray(question.options)) return;
+        question.options.forEach((option, index) => {
+          if (!Number.isInteger(option.originalIndex)) option.originalIndex = index;
+        });
+        for (let i = question.options.length - 1; i > 0; i -= 1) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [question.options[i], question.options[j]] = [question.options[j], question.options[i]];
+        }
+        orderByQuestion.set(question.id, question.options.map((option) => option.id));
+      });
+      koreanQuestions.forEach((question) => {
+        if (question.id === "a-structure" || !Array.isArray(question.options)) return;
+        question.options.forEach((option, index) => {
+          if (!Number.isInteger(option.originalIndex)) option.originalIndex = index;
+        });
+        const order = orderByQuestion.get(question.id);
+        if (!order) return;
+        const positions = new Map(order.map((id, index) => [id, index]));
+        question.options.sort((left, right) => positions.get(left.id) - positions.get(right.id));
+      });
+    }
+
+    function updateLineage(questionId = null, showAll = false) {
+      const activeModels = new Set(showAll ? ["ssm", "hippo", "lssl", "s4d", "h3", "mamba"] : (lineageByQuestion[questionId] || []));
+      document.querySelectorAll(".lineage-step").forEach((step) => {
+        step.classList.toggle("is-active", activeModels.has(step.dataset.model));
+      });
+    }
+
+    function arraysEqualAsSets(a, b) {
+      if (!Array.isArray(a) || a.length !== b.length) return false;
+      const left = [...a].sort();
+      const right = [...b].sort();
+      return left.every((value, index) => value === right[index]);
+    }
+
+    function isCorrect(question) {
+      const answer = state.answers[question.id];
+      if (question.type === "multi") return arraysEqualAsSets(answer || [], question.correct);
+      if (question.type === "drag") {
+        if (!answer) return false;
+        return question.items.every((item) => answer[item.id] === question.correct[item.id]);
+      }
+      return answer === question.correct;
+    }
+
+    function feedbackTone(question) {
+      if (state.correctness[question.id]) return "good";
+      if (question.type === "multi") {
+        const selected = state.answers[question.id] || [];
+        const correctHits = selected.filter((id) => question.correct.includes(id)).length;
+        return correctHits / question.correct.length >= 0.5 ? "warn" : "bad";
+      }
+      if (question.type === "drag") {
+        const placements = state.answers[question.id] || {};
+        const correctHits = question.items.filter((item) => placements[item.id] === question.correct[item.id]).length;
+        return correctHits / question.items.length >= 0.5 ? "warn" : "bad";
+      }
+      return "bad";
+    }
+
+    function correctAnswerLabel(question) {
+      if (!question.options || question.type === "drag") return "";
+      const correctIds = Array.isArray(question.correct) ? question.correct : [question.correct];
+      const numbers = question.options
+        .map((option, index) => correctIds.includes(option.id) ? circledOptionNumber(index) : "")
+        .filter(Boolean)
+        .join("");
+      return `${ui.correctAnswer} ${numbers}`;
+    }
+
+    function renderExplanation(question) {
+      if (!Array.isArray(question.explanation)) return `<div class="derivation">${question.explanation}</div>`;
+      const items = question.explanation.map((item, sourceIndex) => {
+        const originalIndices = Array.from(item.key || "")
+          .map((character) => ["①", "②", "③", "④", "⑤"].indexOf(character))
+          .filter((index) => index >= 0);
+        const indices = Array.isArray(item.optionIds)
+          ? item.optionIds
+              .map((id) => question.options.findIndex((option) => option.id === id))
+              .filter((index) => index >= 0)
+              .sort((a, b) => a - b)
+          : question.options && originalIndices.length
+            ? originalIndices
+                .map((originalIndex) => question.options.findIndex((option) => option.originalIndex === originalIndex))
+                .filter((index) => index >= 0)
+                .sort((a, b) => a - b)
+            : [];
+        return {
+          ...item,
+          sourceIndex,
+          indices,
+          displayKey: indices.length ? indices.map(circledOptionNumber).join("") : item.key
+        };
+      });
+      if (question.options) {
+        items.sort((a, b) => (a.indices[0] ?? a.sourceIndex) - (b.indices[0] ?? b.sourceIndex));
+      }
+      return `<ul class="explanation-list">${items.map((item) => `
+        <li><span class="explanation-key">${item.displayKey}:</span>${item.text}</li>`).join("")}</ul>`;
+    }
+
+    function hasCompleteAnswer(question) {
+      const answer = state.answers[question.id];
+      if (question.type === "multi") return Array.isArray(answer) && answer.length > 0;
+      if (question.type === "drag") {
+        return !!answer && question.items.every((item) => Boolean(answer[item.id]));
+      }
+      return typeof answer === "string" && answer.length > 0;
+    }
+
+    function renderOption(question, option, index) {
+      const answer = state.answers[question.id];
+      const checked = Boolean(state.checked[question.id]);
+      const selected = question.type === "multi"
+        ? (answer || []).includes(option.id)
+        : answer === option.id;
+      const correctOption = question.type === "multi"
+        ? question.correct.includes(option.id)
+        : question.correct === option.id;
+
+      let statusClass = selected ? " selected" : "";
+      if (checked && correctOption) statusClass = " correct";
+      if (checked && selected && !correctOption) statusClass = " wrong";
+      const marker = checked && selected ? (correctOption ? "O" : "X") : optionNumber(index);
+
+      return `
+        <button class="option${statusClass}" type="button"
+          data-option-id="${option.id}" ${checked ? "disabled" : ""}
+          aria-pressed="${selected}">
+          <span class="option-index">${marker}</span>
+          <span>${option.text}</span>
+        </button>`;
+    }
+
+    function renderChoiceBody(question) {
+      const equation = question.equation ? `<div class="equation">${question.equation}</div>` : "";
+      const prompt = question.prompt ? `<div class="equation-prompt">${question.prompt}</div>` : "";
+      return `${equation}${prompt}<div class="options">${question.options.map((option, index) => renderOption(question, option, index)).join("")}</div>`;
+    }
+
+    function renderComboBody(question) {
+      const statements = question.statements.map((statement) => `<li>${statement}</li>`).join("");
+      return `
+        <ol class="statements">${statements}</ol>
+        <div class="options">${question.options.map((option, index) => renderOption(question, option, index)).join("")}</div>`;
+    }
+
+    function renderDragCard(question, item, placement = null) {
+      const checked = Boolean(state.checked[question.id]);
+      const selected = state.selectedDrags.includes(item.id);
+      let placementClass = "";
+      if (checked && placement) {
+        placementClass = question.correct[item.id] === placement ? " placed-correct" : " placed-wrong";
+      }
+      return `
+        <button type="button" class="drag-card${selected ? " selected" : ""}${placementClass}"
+          draggable="${checked ? "false" : "true"}" data-drag-id="${item.id}" ${checked ? "disabled" : ""}
+          aria-pressed="${selected}">${item.label}</button>`;
+    }
+
+    function renderDragBody(question) {
+      const placements = state.answers[question.id] || {};
+      const unassigned = question.items.filter((item) => !placements[item.id]);
+      const bank = unassigned.length
+        ? unassigned.map((item) => renderDragCard(question, item)).join("")
+        : `<span class="bank-empty">${ui.bankEmpty}</span>`;
+
+      const zones = question.categories.map((category) => {
+        const cards = question.items
+          .filter((item) => placements[item.id] === category.id)
+          .map((item) => renderDragCard(question, item, category.id))
+          .join("");
+        return `
+          <div class="drop-zone" role="button" tabindex="0" data-category-id="${category.id}"
+            aria-label="${category.label} ${ui.regionSuffix}">
+            <h3>${category.label}</h3>
+            <p>${category.sub}</p>
+            <div class="zone-cards">${cards}</div>
+          </div>`;
+      }).join("");
+
+      return `
+        <div class="drag-help">${ui.dragHelp}</div>
+        <div class="card-bank" aria-label="${ui.bankLabel}">${bank}</div>
+        <div class="drop-grid">${zones}</div>`;
+    }
+
+    function renderFeedback(question) {
+      if (!state.checked[question.id]) return "";
+      const correct = state.correctness[question.id];
+      const answerLabel = correctAnswerLabel(question);
+      return `
+        <div class="feedback ${feedbackTone(question)}" role="status">
+          <div class="feedback-heading">
+            <strong>${correct ? ui.correct : ui.incorrect}</strong>
+            ${answerLabel ? `<span class="feedback-answer">${answerLabel}</span>` : ""}
+          </div>
+          ${renderExplanation(question)}
+        </div>`;
+    }
+
+    function renderQuestion() {
+      const question = questions[state.index];
+      const checked = Boolean(state.checked[question.id]);
+      const complete = hasCompleteAnswer(question);
+      const body = question.type === "drag"
+        ? renderDragBody(question)
+        : question.type === "combo"
+          ? renderComboBody(question)
+          : renderChoiceBody(question);
+      const note = question.note ? `<p class="question-note">${question.note}</p>` : "";
+
+      counter.innerHTML = `<strong>${state.index + 1}</strong> / ${questions.length}`;
+      progressFill.style.width = `${((state.index + 1) / questions.length) * 100}%`;
+      updateLineage(question.id);
+
+      app.innerHTML = `
+        <section class="quiz-card" aria-labelledby="question-title">
+          <div class="card-body">
+            <div class="question-meta">
+              <span class="question-number">Question ${state.index + 1}</span>
+              <span class="question-type">${question.typeLabel}</span>
+            </div>
+            <h2 class="question-title" id="question-title">${question.title}</h2>
+            ${note}
+            ${body}
+            ${renderFeedback(question)}
+            <div class="actions">
+              <button class="action secondary" type="button" id="backButton" ${state.index === 0 ? "disabled" : ""}>${ui.back}</button>
+              <div class="actions-right">
+                <button class="action primary" type="button" id="checkButton" ${checked || !complete ? "disabled" : ""}>${ui.check}</button>
+                <button class="action next" type="button" id="nextButton" ${checked ? "" : "disabled"}>${state.index === questions.length - 1 ? ui.results : ui.next}</button>
+              </div>
+            </div>
+          </div>
+        </section>`;
+
+      bindQuestionEvents(question);
+      typesetMath(app);
+    }
+
+    function bindQuestionEvents(question) {
+      document.querySelectorAll("[data-option-id]").forEach((button) => {
+        button.addEventListener("click", () => {
+          if (state.checked[question.id]) return;
+          const id = button.dataset.optionId;
+          if (question.type === "multi") {
+            const selected = new Set(state.answers[question.id] || []);
+            selected.has(id) ? selected.delete(id) : selected.add(id);
+            state.answers[question.id] = [...selected];
+          } else {
+            state.answers[question.id] = id;
+          }
+          renderQuestion();
+        });
+      });
+
+      document.querySelectorAll("[data-drag-id]").forEach((card) => {
+        card.addEventListener("click", (event) => {
+          event.stopPropagation();
+          if (state.checked[question.id]) return;
+          const selected = new Set(state.selectedDrags);
+          selected.has(card.dataset.dragId)
+            ? selected.delete(card.dataset.dragId)
+            : selected.add(card.dataset.dragId);
+          state.selectedDrags = [...selected];
+          renderQuestion();
+        });
+        card.addEventListener("dragstart", (event) => {
+          const itemIds = state.selectedDrags.includes(card.dataset.dragId)
+            ? state.selectedDrags
+            : [card.dataset.dragId];
+          event.dataTransfer.setData("text/plain", JSON.stringify(itemIds));
+          event.dataTransfer.effectAllowed = "move";
+        });
+      });
+
+      document.querySelectorAll("[data-category-id]").forEach((zone) => {
+        zone.addEventListener("dragover", (event) => {
+          if (!state.checked[question.id]) event.preventDefault();
+        });
+        zone.addEventListener("drop", (event) => {
+          event.preventDefault();
+          if (state.checked[question.id]) return;
+          const transferData = event.dataTransfer.getData("text/plain");
+          let itemIds;
+          try {
+            itemIds = JSON.parse(transferData);
+          } catch {
+            itemIds = [transferData];
+          }
+          placeDragItems(question, Array.isArray(itemIds) ? itemIds : [itemIds], zone.dataset.categoryId);
+        });
+        zone.addEventListener("click", () => {
+          if (!state.selectedDrags.length || state.checked[question.id]) return;
+          placeDragItems(question, state.selectedDrags, zone.dataset.categoryId);
+        });
+        zone.addEventListener("keydown", (event) => {
+          if ((event.key === "Enter" || event.key === " ") && state.selectedDrags.length && !state.checked[question.id]) {
+            event.preventDefault();
+            placeDragItems(question, state.selectedDrags, zone.dataset.categoryId);
+          }
+        });
+      });
+
+      document.getElementById("backButton").addEventListener("click", () => {
+        if (state.index > 0) {
+          state.index -= 1;
+          state.selectedDrags = [];
+          renderQuestion();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      });
+
+      document.getElementById("checkButton").addEventListener("click", () => {
+        if (!hasCompleteAnswer(question)) return;
+        state.checked[question.id] = true;
+        state.correctness[question.id] = isCorrect(question);
+        state.selectedDrags = [];
+        renderQuestion();
+      });
+
+      document.getElementById("nextButton").addEventListener("click", () => {
+        if (!state.checked[question.id]) return;
+        if (state.index === questions.length - 1) {
+          state.summary = true;
+          renderSummary();
+        } else {
+          state.index += 1;
+          state.selectedDrags = [];
+          renderQuestion();
+        }
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+
+    function placeDragItems(question, itemIds, categoryId) {
+      const validIds = itemIds.filter((itemId) => question.items.some((item) => item.id === itemId));
+      if (!validIds.length) return;
+      const placements = { ...(state.answers[question.id] || {}) };
+      validIds.forEach((itemId) => { placements[itemId] = categoryId; });
+      state.answers[question.id] = placements;
+      state.selectedDrags = [];
+      renderQuestion();
+    }
+
+    function renderSummary() {
+      const score = questions.filter((question) => state.correctness[question.id]).length;
+      const angle = `${(score / questions.length) * 360}deg`;
+      counter.innerHTML = `<strong>${score}</strong> / ${questions.length}`;
+      progressFill.style.width = "100%";
+      updateLineage(null, true);
+
+      const message = score === questions.length
+        ? ui.perfect
+        : score >= 3
+          ? ui.good
+          : ui.review;
+      const summaryTitle = score === questions.length
+        ? ui.summaryPerfectTitle
+        : score >= 3
+          ? ui.summaryGoodTitle
+          : ui.summaryReviewTitle;
+
+      const results = questions.map((question, index) => {
+        const tone = feedbackTone(question);
+        const label = tone === "good" ? ui.resultCorrect : tone === "warn" ? ui.resultPartial : ui.resultWrong;
+        return `
+          <div class="result-item ${tone}">
+            Q${index + 1}<br>${label}
+          </div>`;
+      }).join("");
+
+      const missed = questions
+        .map((question, index) => ({ question, index }))
+        .filter(({ question }) => !state.correctness[question.id]);
+      const review = missed.length ? `
+        <section class="summary-review" aria-label="${ui.reviewHeading}">
+          <h3>${ui.reviewHeading}</h3>
+          ${missed.map(({ question, index }, missedIndex) => {
+            const answerLabel = correctAnswerLabel(question);
+            return `
+              <details class="review-item ${feedbackTone(question) === "warn" ? "warn" : ""}" ${missedIndex === 0 ? "open" : ""}>
+                <summary>
+                  <span class="review-summary-text"><span class="review-index">Q${index + 1}</span><span class="review-question">${question.title}</span></span>
+                  <span class="review-toggle" aria-hidden="true"></span>
+                </summary>
+                <div class="review-body">
+                  ${answerLabel ? `<p class="review-answer">${answerLabel}</p>` : ""}
+                  ${renderExplanation(question)}
+                </div>
+              </details>`;
+          }).join("")}
+        </section>` : "";
+
+      app.innerHTML = `
+        <section class="quiz-card">
+          <div class="card-body summary">
+            <div class="summary-inner">
+              <div class="score-ring" style="--score-angle: ${angle}">
+                <div><strong>${score}/${questions.length}</strong><span>correct</span></div>
+              </div>
+              <p class="eyebrow">Quiz complete</p>
+              <h2>${summaryTitle}</h2>
+              <p class="summary-copy">${message}</p>
+              <div class="result-list">${results}</div>
+              ${review}
+              <button class="action primary" type="button" id="restartButton">${ui.restart}</button>
+            </div>
+          </div>
+        </section>`;
+
+      document.getElementById("restartButton").addEventListener("click", restartQuiz);
+      typesetMath(app);
+    }
+
+    function restartQuiz() {
+      state.index = 0;
+      state.answers = {};
+      state.checked = {};
+      state.correctness = {};
+      state.selectedDrags = [];
+      state.summary = false;
+      shuffleQuestionOptions();
+      renderQuestion();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    shuffleQuestionOptions();
+    renderQuestion();
+  </script>
+</body>
+</html>
