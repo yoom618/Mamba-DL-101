@@ -17,7 +17,7 @@
 
 
 ### Copyright
-**CC0 except the external materials (e.g. screenshots, papers)**
+**CC0 except the screenshots used in the slides**
 
 All screenshots included in the slides identify their source papers or websites. 
 Except for these attributed excerpts, the materials contain only content created by the authors or third-party content available under CC BY or a more permissive license.
