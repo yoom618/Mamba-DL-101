@@ -1,6 +1,35 @@
-## Deep Learning 101: from SSM to Mamba
+
+<div align="center">
+<h4>Educational Material (slides & video)</h4>
+<h2> Deep Learning 101: from SSM to Mamba</h2>
+<h4>Yoo-Min Jung, Doehyeon Lee &nbsp; @ Seoul National University</h4>
+<!-- figure -->
+<br>
+<img src="./Mamba-101-slides.png" alt="Mamba 101 slides" width="700"/>
+</div>
+
+<br>
+
+
+> Please note that the materials are rejected at NeurIPS Edu Track. Leaving it public in case it might be helpful to someone else.
 
 > TL;DR: This educational material explains Mamba in Deep Learning 101 style, without prior knowledge of Transformers.
+
+
+### Copyright
+**CC0 except the external materials (e.g. screenshots, papers)**
+
+All screenshots included in the slides identify their source papers or websites. 
+Except for these attributed excerpts, the materials contain only content created by the authors or third-party content available under CC BY or a more permissive license.
+
+### Declaration of LLM usage
+OpenAI’s Codex is only used to generate the HTML file and to translate some text into English. 
+Every other material and the quizzes themselves are all created by authors without using LLMs. 
+
+
+
+
+
 
 ### The Concept
 Mamba is one of several sequence-model backbones proposed as alternatives to Transformers, so many existing tutorials introduce it through direct comparison with Transformers. However, understanding the core ideas behind Mamba and related SSM-based models does not require prior knowledge of attention. The authors also provide optimized implementations, allowing learners to begin using Mamba without first mastering all of its mathematical and systems details. This educational resource therefore introduces the core ideas behind Mamba to learners who are familiar with the fundamentals of CNNs and RNNs.
